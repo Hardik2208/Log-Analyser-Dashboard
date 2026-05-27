@@ -69,7 +69,7 @@ function TopBar({ collapsed, onToggleCollapse }) {
         />
         <Breadcrumb
           items={[
-            { title: 'EventFlow' },
+            { title: 'EventPulse Control Center' },
             { title: currentLabel },
           ]}
           style={{ fontSize: 13 }}

@@ -283,7 +283,7 @@ whiteSpace:
 
 >
 
-EventFlow
+EventPulse
 
 </div>
 
