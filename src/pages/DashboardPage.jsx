@@ -155,20 +155,6 @@ metricsLoading
 }
 />
 
-<MetricCard
-title="Avg Latency"
-value={
-metrics?.avgLatency || 0
-}
-icon={
-<ClockCircleOutlined/>
-}
-status="info"
-suffix="ms"
-loading={
-metricsLoading
-}
-/>
 
 <MetricCard
 title="Pipeline Latency"
@@ -215,61 +201,9 @@ metricsLoading
 }
 />
 
-<div className="metric-card">
 
-<div
-className="metric-label"
->
 
-Health
 
-</div>
-
-<div
-style={{
-marginTop:16
-}}
->
-
-<StatusBadge
-status={
-metrics?.healthStatus
-||
-'healthy'
-}
-/>
-
-</div>
-
-</div>
-
-<div className="metric-card">
-
-<div
-className="metric-label"
->
-
-Traffic
-
-</div>
-
-<div
-style={{
-marginTop:16
-}}
->
-
-<StatusBadge
-status={
-metrics?.trafficStatus
-||
-'active'
-}
-/>
-
-</div>
-
-</div>
 
 </div>
 
