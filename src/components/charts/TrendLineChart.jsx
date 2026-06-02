@@ -1,213 +1,176 @@
 import React from 'react';
 
 import {
-ResponsiveContainer,
-LineChart,
-CartesianGrid,
-XAxis,
-YAxis,
-Tooltip,
-Legend,
-Line
+  ResponsiveContainer,
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Line
 } from 'recharts';
 
-const formatXAxis = (value)=>{
-
-if(!value){
-return '';
-}
-
-const date =
-new Date(value);
-
-if(
-Number.isNaN(
-date.getTime()
-)
-){
-return value;
-}
-
-const hasTime =
-value.includes(':');
-
-if(hasTime){
-
-return date.toLocaleTimeString(
-[],
-{
-hour:'2-digit',
-minute:'2-digit'
-}
-);
-
-}
-
-return date.toLocaleDateString(
-[],
-{
-day:'2-digit',
-month:'short'
-}
-);
-
-};
+import { formatChartXAxis } from '../../utils/chartDateFormatter';
 
 const CustomTooltip = ({
-active,
-payload,
-label
+  active,
+  payload,
+  label,
+  timeRange
 }) => {
 
-if (
-!active ||
-!payload?.length
-) {
-return null;
-}
+  if (
+    !active ||
+    !payload?.length
+  ) {
+    return null;
+  }
 
-return (
+  return (
 
-<div
-style={{
-background:'var(--bg-secondary)',
-padding:'12px',
-borderRadius:'8px'
-}}
->
+    <div
+      style={{
+        background: 'var(--bg-secondary)',
+        padding: '12px',
+        borderRadius: '8px'
+      }}
+    >
 
-<div
-style={{
-marginBottom:'8px'
-}}
->
+      <div
+        style={{
+          marginBottom: '8px'
+        }}
+      >
+        {formatChartXAxis(label, timeRange)}
+      </div>
 
-{
-formatXAxis(
-label
-)
-}
+      {
+        payload.map(
+          (entry) => {
 
-</div>
+            const value =
+              Number(
+                entry.value
+              );
 
-{
-payload.map(
-(entry)=>{
+            return (
 
-const value =
-Number(
-entry.value
-);
+              <div
+                key={
+                  entry.dataKey
+                }
+              >
 
-return (
+                {entry.name} :
 
-<div
-key={
-entry.dataKey
-}
->
+                {
 
-{entry.name} :
+                  Number.isFinite(
+                    value
+                  )
 
-{
+                    ?
 
-Number.isFinite(
-value
-)
+                    value.toFixed(2)
 
-?
+                    :
 
-value.toFixed(2)
+                    entry.value
 
-:
+                }
 
-entry.value
+              </div>
 
-}
+            );
 
-</div>
+          }
+        )
+      }
 
-);
+    </div>
 
-}
-)
-}
-
-</div>
-
-);
+  );
 
 };
 
 const TrendLineChart = ({
-data=[],
-lines=[],
-height=300
+  data = [],
+  lines = [],
+  height = 300,
+  timeRange = '24h'
 }) => {
 
-return (
+  return (
 
-<ResponsiveContainer
-width="100%"
-height={height}
->
+    <ResponsiveContainer
+      width="100%"
+      height={height}
+    >
 
-<LineChart
-data={data}
->
+      <LineChart
+        data={data}
+      >
 
-<CartesianGrid
-strokeDasharray="3 3"
-/>
+        <CartesianGrid
+          strokeDasharray="3 3"
+        />
 
-<XAxis
-dataKey="bucket"
-tickFormatter={formatXAxis}
-tick={{
-fontSize:11
-}}
-height={60}
-/>
+        <XAxis
+          dataKey="bucket"
+          tickFormatter={(value) =>
+            formatChartXAxis(
+              value,
+              timeRange
+            )
+          }
+          tick={{
+            fontSize: 11
+          }}
+          height={60}
+        />
 
-<YAxis
-domain={[
-'auto',
-'auto'
-]}
-/>
+        <YAxis
+          domain={[
+            'auto',
+            'auto'
+          ]}
+        />
 
-<Tooltip
-content={
-<CustomTooltip/>
-}
-/>
+        <Tooltip
+          content={
+            <CustomTooltip
+              timeRange={timeRange}
+            />
+          }
+        />
 
-<Legend/>
+        <Legend />
 
-{
-lines.map(
-line=>(
+        {
+          lines.map(
+            line => (
 
-<Line
-key={line.dataKey}
-type="monotone"
-dataKey={line.dataKey}
-name={line.name}
-stroke={line.color}
-strokeWidth={2}
-dot={false}
-connectNulls
-/>
+              <Line
+                key={line.dataKey}
+                type="monotone"
+                dataKey={line.dataKey}
+                name={line.name}
+                stroke={line.color}
+                strokeWidth={2}
+                dot={false}
+                connectNulls
+              />
 
-)
-)
-}
+            )
+          )
+        }
 
-</LineChart>
+      </LineChart>
 
-</ResponsiveContainer>
+    </ResponsiveContainer>
 
-);
+  );
 
 };
 
